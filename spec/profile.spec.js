@@ -49,7 +49,7 @@ describe('Partner Profile', function () {
             properties: {
                 partnerId: {
                     type: 'string',
-                    eq: 'AppNexxusHtb'
+                    eq: 'AppNexusHtb'
                 },
                 namespace: {
                     type: 'string',
