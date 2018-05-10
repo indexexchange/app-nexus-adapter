@@ -27,6 +27,7 @@ var Utilities = require('utilities.js');
 var Whoopsie = require('whoopsie.js');
 var EventsService;
 var RenderService;
+var ComplianceService;
 
 //? if (DEBUG) {
 var ConfigValidators = require('config-validators.js');
@@ -136,6 +137,37 @@ function AppNexusHtb(configs) {
         if (referrer) {
             queryObj.referrer = referrer;
         }
+
+         /* ------------------------ Get consent information -------------------------
+         * If you want to implement GDPR consent in your adapter, use the function
+         * ComplianceService.gdpr.getConsent() which will return an object.
+         *
+         * Here is what the values in that object mean:
+         *      - applies: the boolean value indicating if the request is subject to
+         *      GDPR regulations
+         *      - consentString: the consent string developed by GDPR Consent Working
+         *      Group under the auspices of IAB Europe
+         *
+         * The return object should look something like this:
+         * {
+         *      applies: true,
+         *      consentString: "BOQ7WlgOQ7WlgABABwAAABJOACgACAAQABA"
+         * }
+         *
+         * You can also determine whether or not the publisher has enabled privacy
+         * features in their wrapper by querying ComplianceService.isPrivacyEnabled().
+         * 
+         * This function will return a boolean, which indicates whether the wrapper's
+         * privacy features are on (true) or off (false). If they are off, the values
+         * returned from gdpr.getConsent() are safe defaults and no attempt has been
+         * made by the wrapper to contact a Consent Management Platform.
+         */
+        var gdprStatus = ComplianceService.gdpr.getConsent();
+
+        /* ------- Put GDPR consent code here if you are implementing GDPR ---------- */
+        
+        queryObj.gdpr = gdprStatus ? 1 : 0;
+        queryObj.gdpr_consent = gdprStatus.consentString;
 
         return {
             url: __baseUrl,
@@ -291,6 +323,7 @@ function AppNexusHtb(configs) {
     (function __constructor() {
         EventsService = SpaceCamp.services.EventsService;
         RenderService = SpaceCamp.services.RenderService;
+        ComplianceService = SpaceCamp.services.ComplianceService;
 
         __profile = {
             partnerId: 'AppNexusHtb',
