@@ -162,13 +162,14 @@ function AppNexusHtb(configs) {
          * returned from gdpr.getConsent() are safe defaults and no attempt has been
          * made by the wrapper to contact a Consent Management Platform.
          */
-        var gdprStatus = ComplianceService.gdpr.getConsent();
-
-        /* ------- Put GDPR consent code here if you are implementing GDPR ---------- */
         
-        queryObj.gdpr = gdprStatus.applies ? 1 : 0;
-        queryObj.gdpr_consent = gdprStatus.consentString;
-
+        /* ------- Put GDPR consent code here if you are implementing GDPR ---------- */
+        if(ComplianceService.isPrivacyEnabled()) {
+            var gdprStatus = ComplianceService.gdpr.getConsent();
+            queryObj.gdpr = gdprStatus.applies ? 1 : 0;
+            queryObj.gdpr_consent = gdprStatus.consentString;
+        }
+        
         return {
             url: __baseUrl,
             data: queryObj,
