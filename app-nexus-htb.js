@@ -166,7 +166,7 @@ function AppNexusHtb(configs) {
 
         /* ------- Put GDPR consent code here if you are implementing GDPR ---------- */
         
-        queryObj.gdpr = gdprStatus ? 1 : 0;
+        queryObj.gdpr = gdprStatus.applies ? 1 : 0;
         queryObj.gdpr_consent = gdprStatus.consentString;
 
         return {
